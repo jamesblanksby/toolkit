@@ -1,0 +1,40 @@
+{
+    "name": "@thisismyengine/toolkit",
+    "version": "0.0.3",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thisismyengine/toolkit.git"
+    },
+    "license": "MIT",
+    "type": "module",
+    "bugs": {
+        "url": "https://github.com/thisismyengine/toolkit/issues"
+    },
+    "homepage": "https://github.com/thisismyengine/toolkit#readme",
+    "directories": {
+        "lib": "lib"
+    },
+    "bin": {
+        "toolkit": "bin/toolkit"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "browser-sync": "^3.0.2",
+        "chalk": "^5.3.0",
+        "chokidar": "^3.6.0",
+        "cssnano": "^6.0.3",
+        "fast-glob": "^3.3.2",
+        "minimatch": "^9.0.3",
+        "postcss": "^8.4.35",
+        "postcss-preset-env": "^9.3.0",
+        "sass": "^1.70.0",
+        "uglify-js": "^3.17.4"
+    },
+    "browserslist": [
+        "> 0.25% and not dead"
+    ]
+}
