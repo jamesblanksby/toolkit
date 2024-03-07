@@ -25,12 +25,12 @@ export default async function cli(args) {
 
     if (flags.has('help') || flags.has('h')) {
         console.log();
-        console.log(`Usage': ${chalk.yellow('$')} ${chalk.bold(path.basename(process.argv[1]))} ${chalk.blue('[command]')} ${chalk.grey('[options]')}`);
+        console.log(`Usage: ${chalk.yellow('$')} ${chalk.bold(path.basename(process.argv[1]))} ${chalk.blue('[tasks]')} ${chalk.grey('[options]')}`);
         console.log();
         console.log('Options:');
         console.log(`  --help, -h    ${chalk.grey('Show this help and exit.')}`);
         console.log(`  --config      ${chalk.grey('Manually set path of the config file.')}`);
-        console.log(`  --tasks, -t   ${chalk.grey('Print the tasks for the loaded config and exit.')}`);
+        console.log(`  --tasks, -t   ${chalk.grey('Print the tasks from the loaded config and exit.')}`);
         console.log(`  --quiet       ${chalk.grey('Minimize logging.')}`);
         console.log(`  --silent      ${chalk.grey('Suppress all non-essential logging.')}`);
         console.log();
@@ -50,7 +50,7 @@ export default async function cli(args) {
 
     if (flags.has('tasks') || flags.has('t')) {
         console.log();
-        console.log(`Tasks for ${chalk.magenta.bold(path.relative(PWD, config))}:`);
+        console.log(`Tasks from: ${chalk.magenta.bold(path.relative(PWD, config))}:`);
         for (const name of toolkit.getTasks().keys()) {
             if (name !== 'default') {
                 console.log(`  - ${name}`);
@@ -61,9 +61,11 @@ export default async function cli(args) {
         process.exit();
     }
 
-    console.log();
-    console.log(`Using config from: ${chalk.magenta.bold(path.relative(PWD, config))}`);
-    console.log();
+    if (!flags.has('silent')) {
+        console.log();
+        console.log(`Using config from: ${chalk.magenta.bold(path.relative(PWD, config))}`);
+        console.log();
+    }
 
     await toolkit.run(tasks);
 }

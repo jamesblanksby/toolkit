@@ -2,7 +2,6 @@ import dest from './dest.js';
 import { flatten } from './helper.js';
 import rename from './rename.js';
 import rm from './rm.js';
-import watch from './watch.js';
 
 export default class Files {
     #iterable;
@@ -40,9 +39,5 @@ export default class Files {
 
     rm(...args) {
         return this.pipe(rm, ...args);
-    }
-
-    watch(...args) {
-        return this.pipe(watch, ...args);
     }
 }
