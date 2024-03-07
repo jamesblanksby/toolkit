@@ -8,7 +8,7 @@ export default async function scriptMinify(file) {
     const result = uglifyjs.minify(file.contents);
 
     if (result.error) {
-        return;
+        throw result.error;
     }
 
     const minifiedPath = file.path.replace(/.js$/, '.min.js');

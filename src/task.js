@@ -21,10 +21,9 @@ export default class Task {
     async #run(scope, input) {
         scope.emit('start', { task: this.name, date: new Date(), });
 
-        const handler = typeof this.#handler === 'function' ? this.#handler.call(scope, input) : this.#handler;
-
         try {
-            const result = new Files(handler).toArray();
+            const handler = this.#handler.call(scope, input);
+            const result = await new Files(handler).toArray();
 
             scope.emit('stop', { task: this.name, date: new Date(), });
 
@@ -67,6 +66,10 @@ function series(...tasks) {
     tasks = validateTasks(tasks);
     return async function(input) {
         for (const task of tasks) {
+            if (!input) {
+                break;
+            }
+
             input = await task.run(this, input);
         }
         return input;

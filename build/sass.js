@@ -61,9 +61,7 @@ export default async function sassBuild(file) {
     try {
         result = sass.compile(sassPath, { sourceMap: true, });
     } catch (error) {
-        console.log(error.message);
-
-        return;
+        throw error.message;
     }
 
     const cssPath = sassPath.replace(/sass|scss/g, 'css');

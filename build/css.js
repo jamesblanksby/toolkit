@@ -22,6 +22,6 @@ export default async function cssBuild(file) {
         const result = await transformer.process(file.contents, options);
         return new MemoryFile(file.path, result.css);
     } catch (error) {
-        return;
+        throw error.message;
     }
 }
