@@ -1,3 +1,4 @@
+import EventEmitter from 'events';
 import path from 'path';
 import process from 'process';
 import url from 'url';
@@ -10,12 +11,13 @@ import watch from './src/watch.js';
 
 let scope = null;
 
-export default class Toolkit {
+export default class Toolkit extends EventEmitter {
     #flags;
     #config;
     #tasks;
 
     constructor(flags) {
+        super();
         this.#flags = flags;
     }
 

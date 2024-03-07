@@ -3,6 +3,7 @@ import url from 'url';
 
 import chalk from 'chalk';
 
+import logEvents from './events.js';
 import Toolkit from '../index.js';
 
 const { PWD, } = process.env;
@@ -43,6 +44,7 @@ export default async function cli(args) {
     const config = flags.get('config') || `${directory}/../toolkit.config.js`;
 
     const toolkit = new Toolkit(flags);
+    logEvents(toolkit);
 
     await toolkit.load(config);
 

@@ -4,7 +4,7 @@ import cssBuild from './build/css.js';
 import sassBuild from './build/sass.js';
 import scriptMinify from './build/script.js';
 
-import { series, src, watch } from './index.js';
+import { parallel, series, src, watch } from './index.js';
 
 const { PWD, } = process.env;
 
@@ -14,6 +14,18 @@ const pattern = {
     css: `${PWD}/**/css/*.css`,
     script: `${PWD}/**/script/*.js`,
 };
+
+function sync() {
+    browsersync.init({
+        ghostMode: false,
+        logLevel: 'silent',
+        notify: false,
+        open: false,
+        proxy: 'http://127.0.0.1',
+        snippet: false,
+        ui: false,
+    });
+}
 
 function sass(files) {
     return files.pipe(async function*(files) {
@@ -31,12 +43,19 @@ function css(files) {
     }).dest();
 }
 
-function sync(files) {
+function reload(files) {
     return files.pipe(async function*(files) {
         for await (const file of files) {
             browsersync.reload(file.path);
         }
     });
+}
+
+function observe() {
+    watch(pattern.html, reload);
+    watch(pattern.sass, series(sass, css));
+    watch(pattern.css, reload);
+    watch(pattern.script, reload);
 }
 
 function minify() {
@@ -47,22 +66,8 @@ function minify() {
     }).dest();
 }
 
-export default function dev() {
-    browsersync.init({
-        ghostMode: false,
-        logLevel: 'silent',
-        notify: false,
-        open: false,
-        proxy: 'http://127.0.0.1',
-        snippet: false,
-        ui: false,
-    });
-
-    watch(pattern.html, sync);
-    watch(pattern.sass, series(sass, css));
-    watch(pattern.css, sync);
-    watch(pattern.script, sync);
-}
+const dev = parallel(sync, observe);
+export default dev;
 
 export {
     dev,

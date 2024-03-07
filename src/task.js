@@ -15,15 +15,23 @@ export default class Task {
     }
 
     get name() {
-        return names.get(this.#handler) || this.#handler.name;
+        return names.get(this.#handler) || this.#handler.name || '<anonymous>';
     }
 
     async #run(scope, input) {
+        scope.emit('start', { task: this.name, date: new Date(), });
+
         const handler = typeof this.#handler === 'function' ? this.#handler.call(scope, input) : this.#handler;
 
         try {
-            return new Files(handler).toArray();
+            const result = new Files(handler).toArray();
+
+            scope.emit('stop', { task: this.name, date: new Date(), });
+
+            return result;
         } catch (error) {
+            scope.emit('error', { task: this.name, date: new Date(), error: error, });
+
             return;
         }
     }
