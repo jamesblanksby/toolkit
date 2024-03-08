@@ -143,7 +143,7 @@ Reads the content of the file and returns a new instance of `MemoryFile` with th
 $ npm toolkit [tasks] [options]
 ```
 
-> **Note**  
+> [!NOTE]
 > This package ships with a [default set of tasks](./toolkit.config.js), covering a range of common use cases. You can manually specify a different configuration file using the `--config` option.
 
 #### Options
