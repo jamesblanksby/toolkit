@@ -1,7 +1,8 @@
 import browsersync from 'browser-sync';
 
-import cssBuild from './build/css.js';
-import sassBuild from './build/sass.js';
+import browserReload from './build/browser.js';
+import cssTransform from './build/css.js';
+import sassCompile from './build/sass.js';
 import { scriptLint, scriptMinify } from './build/script.js';
 
 import { parallel, series, src, watch } from './index.js';
@@ -28,27 +29,15 @@ function sync() {
 }
 
 function sass(files) {
-    return files.pipe(async function*(files) {
-        for await (const file of files) {
-            yield sassBuild(file);
-        }
-    }).dest();
+    return files.pipe(sassCompile).dest();
 }
 
 function css(files) {
-    return files.pipe(async function*(files) {
-        for await (const file of files) {
-            yield cssBuild(file);
-        }
-    }).dest();
+    return files.pipe(cssTransform).dest();
 }
 
 function reload(files) {
-    return files.pipe(async function(files) {
-        for await (const file of files) {
-            browsersync.reload(file.path);
-        }
-    });
+    return files.pipe(browserReload);
 }
 
 function observe() {
@@ -63,11 +52,7 @@ function lint() {
 }
 
 function minify() {
-    return src(pattern.script, { ignore: ['**.min.js',], }).pipe(async function*(files) {
-        for await (const file of files) {
-            yield scriptMinify(file);
-        }
-    }).dest();
+    return src(pattern.script, { ignore: ['**.min.js',], }).pipe(scriptMinify).dest();
 }
 
 const dev = parallel(sync, observe);

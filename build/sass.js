@@ -54,23 +54,23 @@ async function createCssFileWithMap(file, source) {
     return file;
 }
 
-export default async function sassBuild(file) {
-    sassPath = await findMainPath(file.path);
+export default async function* sassCompile(files) {
+    for await (const file of files) {
+        sassPath = await findMainPath(file.path);
 
-    let result;
-    try {
-        result = sass.compile(sassPath, { sourceMap: true, });
-    } catch (error) {
-        throw error.message;
+        let result;
+        try {
+            result = sass.compile(sassPath, { sourceMap: true, });
+        } catch (error) {
+            throw error.message;
+        }
+
+        const cssPath = sassPath.replace(/sass|scss/g, 'css');
+        let cssFile = createCssFile(result.css, cssPath);
+
+        const mapPath = `${cssPath}.map`;
+        await createMapFile(result.sourceMap, mapPath);
+
+        yield await createCssFileWithMap(cssFile, mapPath);
     }
-
-    const cssPath = sassPath.replace(/sass|scss/g, 'css');
-    let cssFile = createCssFile(result.css, cssPath);
-
-    const mapPath = `${cssPath}.map`;
-    await createMapFile(result.sourceMap, mapPath);
-
-    cssFile = await createCssFileWithMap(cssFile, mapPath);
-
-    return cssFile;
 }

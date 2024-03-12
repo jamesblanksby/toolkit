@@ -9,19 +9,21 @@ const transformer = postcss(
     cssnano,
 );
 
-export default async function cssBuild(file) {
-    file = await file.read();
+export default async function* cssTransform(files) {
+    for await (let file of files) {
+        file = await file.read();
 
-    const options = {
-        from: file.path,
-        map: true,
-        to: file.path,
-    };
+        const options = {
+            from: file.path,
+            map: true,
+            to: file.path,
+        };
 
-    try {
-        const result = await transformer.process(file.contents, options);
-        return new MemoryFile(file.path, result.css);
-    } catch (error) {
-        throw error.message;
+        try {
+            const result = await transformer.process(file.contents, options);
+            yield new MemoryFile(file.path, result.css);
+        } catch (error) {
+            throw error.message;
+        }
     }
 }

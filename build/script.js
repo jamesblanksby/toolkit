@@ -21,18 +21,20 @@ async function scriptLint(files) {
     console.log(result);
 }
 
-async function scriptMinify(file) {
-    file = await file.read();
+async function* scriptMinify(files) {
+    for await (let file of files) {
+        file = await file.read();
 
-    const result = uglifyjs.minify(file.contents);
+        const result = uglifyjs.minify(file.contents);
 
-    if (result.error) {
-        throw result.error;
+        if (result.error) {
+            throw result.error;
+        }
+
+        const minifiedPath = file.path.replace(/.js$/, '.min.js');
+
+        yield new MemoryFile(minifiedPath, result.code);
     }
-
-    const minifiedPath = file.path.replace(/.js$/, '.min.js');
-
-    return new MemoryFile(minifiedPath, result.code);
 }
 
 export {
