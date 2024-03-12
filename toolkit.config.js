@@ -44,7 +44,7 @@ function css(files) {
 }
 
 function reload(files) {
-    return files.pipe(async function*(files) {
+    return files.pipe(async function(files) {
         for await (const file of files) {
             browsersync.reload(file.path);
         }
