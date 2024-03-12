@@ -1,8 +1,27 @@
+import { ESLint } from 'eslint';
 import uglifyjs from 'uglify-js';
 
 import { MemoryFile } from '../src/file.js';
 
-export default async function scriptMinify(file) {
+async function scriptLint(files) {
+    const eslint = new ESLint();
+
+    let results = [];
+
+    for await (let file of files) {
+        file = await file.read();
+
+        const fileResult = await eslint.lintText(file.contents, { filePath: file.path, });
+        results = results.concat(fileResult);
+    }
+
+    const formatter = await eslint.loadFormatter();
+    const result = formatter.format(results);
+
+    console.log(result);
+}
+
+async function scriptMinify(file) {
     file = await file.read();
 
     const result = uglifyjs.minify(file.contents);
@@ -15,3 +34,8 @@ export default async function scriptMinify(file) {
 
     return new MemoryFile(minifiedPath, result.code);
 }
+
+export {
+    scriptLint,
+    scriptMinify,
+};

@@ -2,7 +2,7 @@ import browsersync from 'browser-sync';
 
 import cssBuild from './build/css.js';
 import sassBuild from './build/sass.js';
-import scriptMinify from './build/script.js';
+import { scriptLint, scriptMinify } from './build/script.js';
 
 import { parallel, series, src, watch } from './index.js';
 
@@ -58,6 +58,10 @@ function observe() {
     watch(pattern.script, reload);
 }
 
+function lint() {
+    return src(pattern.script, { ignore: ['**.min.js',], }).pipe(scriptLint);
+}
+
 function minify() {
     return src(pattern.script, { ignore: ['**.min.js',], }).pipe(async function*(files) {
         for await (const file of files) {
@@ -71,5 +75,6 @@ export default dev;
 
 export {
     dev,
+    lint,
     minify,
 };
