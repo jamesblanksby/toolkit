@@ -1,10 +1,17 @@
+import path from 'path';
+import url from 'url';
+
 import { ESLint } from 'eslint';
 import uglifyjs from 'uglify-js';
 
 import { MemoryFile } from '../src/file.js';
 
 async function scriptLint(files) {
-    const eslint = new ESLint();
+    const configDir = path.dirname(url.fileURLToPath(import.meta.url));
+
+    const eslint = new ESLint({
+        overrideConfigFile: `${configDir}/../.eslintrc.json`,
+    });
 
     let results = [];
 
