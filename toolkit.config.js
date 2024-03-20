@@ -29,11 +29,13 @@ function sync() {
 }
 
 function sass(files) {
-    return files.pipe(sassCompile).dest();
+    return files.pipe(sassCompile)
+        .dest();
 }
 
 function css(files) {
-    return files.pipe(cssTransform).dest();
+    return files.pipe(cssTransform)
+        .dest();
 }
 
 function reload(files) {
@@ -48,11 +50,14 @@ function observe() {
 }
 
 function lint() {
-    return src(pattern.script, { ignore: ['**.min.js',], }).pipe(scriptLint);
+    return src(pattern.script, { ignore: ['**.min.js',], })
+        .pipe(scriptLint);
 }
 
 function minify() {
-    return src(pattern.script, { ignore: ['**.min.js',], }).pipe(scriptMinify).dest();
+    return src(pattern.script, { ignore: ['**.min.js',], })
+        .pipe(scriptMinify)
+        .dest();
 }
 
 const dev = parallel(sync, observe);
