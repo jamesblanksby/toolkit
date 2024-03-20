@@ -4,6 +4,7 @@ import browserReload from './build/browser.js';
 import cssTransform from './build/css.js';
 import sassCompile from './build/sass.js';
 import { scriptLint, scriptMinify } from './build/script.js';
+import shopifyFlatten from './build/shopify.js';
 
 import { parallel, series, src, watch } from './index.js';
 
@@ -60,6 +61,16 @@ function minify() {
         .dest();
 }
 
+async function shopify() {
+    const shopifyDir = `${PWD}/../shopify/assets`;
+
+    src(`${shopifyDir}/**`).rm();
+
+    return src(`${PWD}/**/(css|font|gfx|plugin|script)/**`, { ignore: '**/node_modules/**', })
+        .pipe(shopifyFlatten)
+        .dest(shopifyDir);
+}
+
 const dev = parallel(sync, observe);
 export default dev;
 
@@ -67,4 +78,5 @@ export {
     dev,
     lint,
     minify,
+    shopify,
 };
