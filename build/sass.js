@@ -3,7 +3,7 @@ import path from 'path';
 
 import * as sass from 'sass';
 
-import { MemoryFile } from '../src/file.js';
+import { MemoryFile } from './../src/file.js';
 
 let sassPath = null;
 
@@ -34,7 +34,7 @@ function createCssFile(css, target) {
 }
 
 async function createMapFile(map, target) {
-    const sassDir = path.resolve(sassPath, '../..');
+    const sassDir = path.resolve(sassPath, './../..');
 
     map.sources = map.sources.map((source) => source.replace(`file://${sassDir}`, '..'));
 

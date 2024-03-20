@@ -2,7 +2,7 @@ import cssnano from 'cssnano';
 import postcss from 'postcss';
 import presetenv from 'postcss-preset-env';
 
-import { MemoryFile } from '../src/file.js';
+import { MemoryFile } from './../src/file.js';
 
 const transformer = postcss(
     presetenv,

@@ -4,7 +4,7 @@ import url from 'url';
 import { ESLint } from 'eslint';
 import uglifyjs from 'uglify-js';
 
-import { MemoryFile } from '../src/file.js';
+import { MemoryFile } from './../src/file.js';
 
 async function scriptLint(files) {
     const configDir = path.dirname(url.fileURLToPath(import.meta.url));
