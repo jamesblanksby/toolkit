@@ -1,6 +1,6 @@
 # 🧰 Toolkit
 
-> A versatile task automation tool that enables you to define and execute various tasks using a configuration file.
+> A customizable task automation tool.
 
 ## Getting Started
 
