@@ -1,17 +1,17 @@
 {
-    "name": "@thisismyengine/toolkit",
+    "name": "@jamesblanksby/toolkit",
     "version": "0.0.9",
     "main": "index.js",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/thisismyengine/toolkit.git"
+        "url": "git+https://github.com/jamesblanksby/toolkit.git"
     },
     "license": "MIT",
     "type": "module",
     "bugs": {
-        "url": "https://github.com/thisismyengine/toolkit/issues"
+        "url": "https://github.com/jamesblanksby/toolkit/issues"
     },
-    "homepage": "https://github.com/thisismyengine/toolkit#readme",
+    "homepage": "https://github.com/jamesblanksby/toolkit#readme",
     "directories": {
         "lib": "lib"
     },

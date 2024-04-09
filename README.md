@@ -7,7 +7,7 @@
 ### Install
 
 ```shell
-$ npm install @thisismyengine/toolkit
+$ npm install @jamesblanksby/toolkit
 ```
 
 ### Usage
