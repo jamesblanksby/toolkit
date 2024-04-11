@@ -25,6 +25,10 @@ async function scriptLint(files) {
     const formatter = await eslint.loadFormatter();
     const result = formatter.format(results);
 
+    if (!result) {
+        return;
+    }
+
     console.log(result);
 }
 
