@@ -4,7 +4,7 @@ import url from 'url';
 import chalk from 'chalk';
 
 import logEvents from './events.js';
-import Toolkit from '../index.js';
+import Toolkit from './../index.js';
 
 const { PWD, } = process.env;
 

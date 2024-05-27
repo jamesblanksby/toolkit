@@ -1,6 +1,6 @@
 import chokidar from 'chokidar';
 
-import Tookit from '../index.js';
+import Tookit from './../index.js';
 
 import src from './src.js';
 import { parallel } from './task.js';
