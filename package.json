@@ -16,7 +16,7 @@
         "lib": "lib"
     },
     "bin": {
-        "toolkit": "bin/toolkit"
+        "toolkit": "bin/toolkit.js"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
