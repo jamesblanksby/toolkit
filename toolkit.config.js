@@ -64,7 +64,7 @@ function minify() {
 async function shopify() {
     const shopifyDir = `${PWD}/../shopify/assets`;
 
-    src(`${shopifyDir}/**`).rm();
+    await src(`${shopifyDir}/**`).rm().toArray();
 
     return src(`${PWD}/**/(css|font|gfx|plugin|script)/**`, { ignore: '**/node_modules/**', })
         .pipe(shopifyFlatten)
