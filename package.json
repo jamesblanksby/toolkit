@@ -12,14 +12,8 @@
         "url": "https://github.com/jamesblanksby/toolkit/issues"
     },
     "homepage": "https://github.com/jamesblanksby/toolkit#readme",
-    "directories": {
-        "lib": "lib"
-    },
     "bin": {
         "toolkit": "bin/toolkit.js"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
         "browser-sync": "^3.0.2",
