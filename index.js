@@ -42,6 +42,8 @@ export default class Toolkit extends EventEmitter {
         const getTask = (name) => {
             const task = this.#tasks.get(name);
             if (!task) {
+                scope.emit('notfound', { task: name, date: new Date(), });
+
                 process.exit(1);
             }
 
