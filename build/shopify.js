@@ -8,10 +8,10 @@ const { PWD, } = process.env;
 
 function flattenAsset(file, type) {
     const name = path.relative(PWD, file.path)
-        .replace(new RegExp(`^src\/${type}\/?`), '')
-        .replace(/\//g, '_');
+        .replace(new RegExp(`src/${type}/?`), '')
+        .replace(new RegExp('/', 'g'), '_');
 
-    return new MemoryFile(name, file.contents);
+    return new MemoryFile(name, file.buffer);
 }
 
 function flattenCss(file) {
@@ -22,9 +22,9 @@ function flattenCss(file) {
     const name = `${path.basename(file.path)}.liquid`;
 
     const result = file.contents
-        .replace(/\.\.\/(font|gfx)\//g, '')
-        .replace(/url\((.*?)\)/g, (_, match) => {
-            const resource = match.replace(/\//g, '_');
+        .replace(new RegExp('../(font|gfx)/', 'g'), '')
+        .replace(new RegExp('url\\((.*?)\\)', 'g'), (_, match) => {
+            const resource = match.replace(new RegExp('/', 'g'), '_');
             return `url({{ '${resource}' | asset_url }})`;
         });
 
