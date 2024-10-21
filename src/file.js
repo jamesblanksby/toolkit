@@ -28,7 +28,7 @@ class MemoryFile extends File {
     constructor(path, contents) {
         super(path);
 
-        this.#buffer = typeof buffer === 'string' ? Buffer.from(contents) : contents;
+        this.#buffer = Buffer.isBuffer(contents) ? contents : Buffer.from(contents);
     }
 
     get buffer() {
@@ -46,8 +46,8 @@ class MemoryFile extends File {
 
 class DiskFile extends File {
     async read() {
-        const buffer = await fs.readFile(this.path);
-        return new MemoryFile(this.path, buffer);
+        const contents = await fs.readFile(this.path);
+        return new MemoryFile(this.path, contents);
     }
 }
 
