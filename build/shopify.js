@@ -4,11 +4,12 @@ import uglifyjs from 'uglify-js';
 
 import { MemoryFile } from './../index.js';
 
-const { PWD, } = process.env;
-
 function flattenAsset(file, type) {
-    const name = path.relative(PWD, file.path)
-        .replace(new RegExp(`src/${type}/?`), '')
+    const assetDir = process.env.ASSET_DIR || process.env.PWD;
+
+    const name = path.relative(assetDir, file.path)
+        .replace(new RegExp(`src/?`), '')
+        .replace(new RegExp(`${type}/?`), '')
         .replace(new RegExp('/', 'g'), '_');
 
     return new MemoryFile(name, file.buffer);
