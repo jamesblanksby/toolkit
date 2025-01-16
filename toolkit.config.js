@@ -13,8 +13,8 @@ const { PWD, } = process.env;
 const pattern = {
     html: `${PWD}/**/*.{html,php}`,
     sass: `${PWD}/**/{sass,scss}/**/*.{sass,scss}`,
-    css: `${PWD}/**/css/*.css`,
-    script: `${PWD}/**/script/*.js`,
+    css: `${PWD}/**/css/**/*.css`,
+    script: `${PWD}/**/script/**/*.js`,
 };
 
 function sync() {
