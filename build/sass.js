@@ -5,72 +5,60 @@ import * as sass from 'sass';
 
 import { MemoryFile } from './../src/file.js';
 
-let sassPath = null;
+async function findMainPaths(source) {
+    const partialDir = path.dirname(source);
 
-async function findMainPath(partialPath) {
-    const partialDir = path.dirname(partialPath);
-
-    async function findMainPathRec(directory) {
+    async function findMainPathsRec(directory, matches = []) {
         const files = await fs.readdir(directory);
 
-        const mainPath = files.find((file) => !file.startsWith('_') && file.endsWith('.scss'));
-        if (mainPath) {
-            return path.join(directory, mainPath);
-        }
+        const matchedFiles = files.filter((file) => !file.startsWith('_') && file.endsWith('.scss'));
+        const fullPaths = matchedFiles.map((file) => path.join(directory, file));
+        
+        matches.push(...fullPaths);
 
         const parentDir = path.dirname(directory);
         if (parentDir !== directory) {
-            return findMainPathRec(parentDir);
+            return findMainPathsRec(parentDir, matches);
         }
 
-        return null;
+        return matches;
     }
 
-    return findMainPathRec(partialDir);
+    return findMainPathsRec(partialDir);
 }
 
-function createCssFile(css, target) {
-    return new MemoryFile(target, css);
-}
+async function createCssAndMapFile(css, map, source) {
+    const cssPath = source.replace(/sass|scss/g, 'css');
+    const mapPath = `${cssPath}.map`;
+    const mapName = path.basename(mapPath);
 
-async function createMapFile(map, target) {
-    const sassDir = path.resolve(sassPath, './../..');
-
-    map.sources = map.sources.map((source) => source.replace(`file://${sassDir}`, '..'));
-
-    await fs.writeFile(target, JSON.stringify(map));
-}
-
-async function createCssFileWithMap(file, source) {
-    const mapName = path.basename(source);
-
-    file = await file.read();
-
-    file = new MemoryFile(file.path, [
-        file.contents,
+    const file = new MemoryFile(cssPath, [
+        css,
         `/*# sourceMappingURL=${mapName} */`,
     ].join('\n'));
+
+    const sassDir = path.resolve(source, './../..');
+    map.sources = map.sources.map((source) => source.replace(`file://${sassDir}`, '..'));
+    
+    await fs.writeFile(mapPath, JSON.stringify(map));
 
     return file;
 }
 
+
 export default async function* sassCompile(files) {
     for await (const file of files) {
-        sassPath = await findMainPath(file.path);
+        const sassPaths = await findMainPaths(file.path);
 
-        let result;
-        try {
-            result = sass.compile(sassPath, { sourceMap: true, });
-        } catch (error) {
-            throw error.message;
+        for (const sassPath of sassPaths) {
+            let result;
+            try {
+                result = sass.compile(sassPath, { sourceMap: true, });
+            } catch (error) {
+                throw new Error(error.message);
+            }
+
+            yield await createCssAndMapFile(result.css, result.sourceMap, sassPath);
         }
-
-        const cssPath = sassPath.replace(/sass|scss/g, 'css');
-        let cssFile = createCssFile(result.css, cssPath);
-
-        const mapPath = `${cssPath}.map`;
-        await createMapFile(result.sourceMap, mapPath);
-
-        yield await createCssFileWithMap(cssFile, mapPath);
     }
 }
