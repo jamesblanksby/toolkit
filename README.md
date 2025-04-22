@@ -1,4 +1,4 @@
-# 🧰 Toolkit
+# 🧰 toolkit
 
 > A customizable task automation tool.
 
