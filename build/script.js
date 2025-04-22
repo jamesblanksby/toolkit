@@ -22,7 +22,7 @@ async function scriptLint(files) {
         file = await file.read();
 
         const fileResult = await eslint.lintText(file.contents, { filePath: file.path, });
-        results = results.concat(fileResult);
+        results.push(...fileResult);
     }
 
     const formatter = await eslint.loadFormatter();
