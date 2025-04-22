@@ -6,11 +6,14 @@ import uglifyjs from 'uglify-js';
 
 import { MemoryFile } from './../src/file.js';
 
+const { PWD, } = process.env;
+
 async function scriptLint(files) {
     const configDir = path.dirname(url.fileURLToPath(import.meta.url));
 
     const eslint = new ESLint({
-        overrideConfigFile: `${configDir}/../.eslintrc.json`,
+        cwd: PWD,
+        overrideConfigFile: `${configDir}/../eslint.config.mjs`,
     });
 
     let results = [];
