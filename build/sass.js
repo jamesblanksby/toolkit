@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import url from 'url';
 
 import * as sass from 'sass';
 
@@ -13,7 +14,7 @@ async function findMainPaths(source) {
 
         const matchedFiles = files.filter((file) => !file.startsWith('_') && file.endsWith('.scss'));
         const fullPaths = matchedFiles.map((file) => path.join(directory, file));
-        
+
         matches.push(...fullPaths);
 
         const parentDir = path.dirname(directory);
@@ -39,21 +40,25 @@ async function createCssAndMapFile(css, map, source) {
 
     const sassDir = path.resolve(source, './../..');
     map.sources = map.sources.map((source) => source.replace(`file://${sassDir}`, '..'));
-    
+
     await fs.writeFile(mapPath, JSON.stringify(map));
 
     return file;
 }
 
-
 export default async function* sassCompile(files) {
     for await (const file of files) {
         const sassPaths = await findMainPaths(file.path);
 
+        const modulesDir = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), './../../..');
+
         for (const sassPath of sassPaths) {
             let result;
             try {
-                result = sass.compile(sassPath, { sourceMap: true, });
+                result = sass.compile(sassPath, {
+                    loadPaths: [modulesDir,],
+                    sourceMap: true,
+                });
             } catch (error) {
                 throw new Error(error.message);
             }
