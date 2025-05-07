@@ -47,18 +47,20 @@ async function createCssAndMapFile(css, map, source) {
 }
 
 export default async function* sassCompile(files) {
+    const modulesDir = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), './../../..');
+
+    const options = {
+        loadPaths: [modulesDir,],
+        sourceMap: true,
+    };
+
     for await (const file of files) {
         const sassPaths = await findMainPaths(file.path);
-
-        const modulesDir = path.resolve(path.dirname(url.fileURLToPath(import.meta.url)), './../../..');
 
         for (const sassPath of sassPaths) {
             let result;
             try {
-                result = sass.compile(sassPath, {
-                    loadPaths: [modulesDir,],
-                    sourceMap: true,
-                });
+                result = sass.compile(sassPath, options);
             } catch (error) {
                 throw new Error(error.message);
             }
