@@ -24,8 +24,12 @@ function flattenCss(file) {
 
     const result = file.contents
         .replace(new RegExp('../(font|gfx)/', 'g'), '')
-        .replace(new RegExp('url\\((.*?)\\)', 'g'), (_, match) => {
-            const resource = match.replace(new RegExp('/', 'g'), '_');
+        .replace(new RegExp('url\\([\'"]?(.*?)?[\'"]?\\)', 'g'), (_, match) => {
+            if (/^https?:\/\//.test(match)) {
+                return `url("${match}")`;
+            }
+        
+            const resource = match.replace(/\//g, '_');
             return `url({{ '${resource}' | asset_url }})`;
         });
 
