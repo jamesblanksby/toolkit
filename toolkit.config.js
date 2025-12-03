@@ -3,7 +3,7 @@ import browsersync from 'browser-sync';
 import browserReload from './build/browser.js';
 import cssTransform from './build/css.js';
 import sassCompile from './build/sass.js';
-import { scriptLint, scriptMinify } from './build/script.js';
+import { jsLint, jsMinify } from './build/js.js';
 import shopifyFlatten from './build/shopify.js';
 
 import { parallel, series, src, watch } from './index.js';
@@ -14,7 +14,7 @@ const pattern = {
     html: `${PWD}/**/*.{html,php}`,
     sass: `${PWD}/**/{sass,scss}/**/*.{sass,scss}`,
     css: `${PWD}/**/css/**/*.css`,
-    script: `${PWD}/**/script/**/*.js`,
+    js: `${PWD}/**/{js,script}/**/*.js`,
 };
 
 function sync() {
@@ -47,17 +47,17 @@ function observe() {
     watch(pattern.html, reload);
     watch(pattern.sass, series(sass, css));
     watch(pattern.css, reload);
-    watch(pattern.script, reload);
+    watch(pattern.js, reload);
 }
 
 function lint() {
-    return src(pattern.script, { ignore: ['**.min.js',], })
-        .pipe(scriptLint);
+    return src(pattern.js, { ignore: ['**.min.js',], })
+        .pipe(jsLint);
 }
 
 function minify() {
-    return src(pattern.script, { ignore: ['**.min.js',], })
-        .pipe(scriptMinify)
+    return src(pattern.js, { ignore: ['**.min.js',], })
+        .pipe(jsMinify)
         .dest();
 }
 
@@ -67,7 +67,7 @@ async function shopify() {
 
     await src(`${shopifyDir}/**`).rm().toArray();
 
-    return src(`${assetDir}/**/(css|font|gfx|plugin|script)/**`, { ignore: '**/node_modules/**', })
+    return src(`${assetDir}/**/(css|font|gfx|js|plugin|script)/**`, { ignore: '**/node_modules/**', })
         .pipe(shopifyFlatten)
         .dest(shopifyDir);
 }

@@ -4,11 +4,11 @@ import url from 'url';
 import { ESLint } from 'eslint';
 import uglifyjs from 'uglify-js';
 
-import { MemoryFile } from './../src/file.js';
+import { MemoryFile } from '../src/file.js';
 
 const { PWD, } = process.env;
 
-async function scriptLint(files) {
+async function jsLint(files) {
     const configDir = path.dirname(url.fileURLToPath(import.meta.url));
 
     const eslint = new ESLint({
@@ -35,7 +35,7 @@ async function scriptLint(files) {
     console.log(result);
 }
 
-async function* scriptMinify(files) {
+async function* jsMinify(files) {
     for await (let file of files) {
         file = await file.read();
 
@@ -52,6 +52,6 @@ async function* scriptMinify(files) {
 }
 
 export {
-    scriptLint,
-    scriptMinify,
+    jsLint,
+    jsMinify,
 };
