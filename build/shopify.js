@@ -36,7 +36,7 @@ function flattenCss(file) {
     return new MemoryFile(name, result);
 }
 
-function flattenScript(file) {
+function flattenJs(file) {
     const result = uglifyjs.minify(file.contents);
 
     if (result.error) {
@@ -57,7 +57,7 @@ export default async function* shopifyFlatten(files) {
         } else if (file.path.includes('/gfx/')) {
             file = flattenAsset(file, 'gfx');
         } else if (file.path.match(/\/(js|script)\//)) {
-            file = flattenScript(file);
+            file = flattenJs(file);
         } else {
             file = new MemoryFile(path.basename(file.path), file.contents);
         }
