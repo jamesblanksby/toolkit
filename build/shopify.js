@@ -56,7 +56,7 @@ export default async function* shopifyFlatten(files) {
             file = flattenAsset(file, 'font');
         } else if (file.path.includes('/gfx/')) {
             file = flattenAsset(file, 'gfx');
-        } else if (file.path.includes('/script/')) {
+        } else if (file.path.match(/\/(js|script)\//)) {
             file = flattenScript(file);
         } else {
             file = new MemoryFile(path.basename(file.path), file.contents);
