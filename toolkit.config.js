@@ -65,7 +65,7 @@ async function shopify() {
     const shopifyDir = `${PWD}/../shopify/assets`;
     const assetDir = process.env.ASSET_DIR || PWD;
 
-    await src(`${shopifyDir}/**`).rm().toArray();
+    await src(`${shopifyDir}/**`).rm().run();
 
     return src(`${assetDir}/**/(css|font|gfx|js|plugin|script)/**`, { ignore: '**/node_modules/**', })
         .pipe(shopifyFlatten)

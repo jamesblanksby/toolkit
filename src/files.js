@@ -40,4 +40,10 @@ export default class Files {
     rm(...args) {
         return this.pipe(rm, ...args);
     }
+
+    async run() {
+        for await (const file of this) {
+            void file;
+        }
+    }
 }
