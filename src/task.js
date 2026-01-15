@@ -19,17 +19,27 @@ export default class Task {
     }
 
     async #run(scope, input) {
-        scope.emit('start', { task: this.name, date: new Date(), });
+        scope.emit('start', {
+            task: this.name,
+            date: new Date()
+        });
 
         try {
             const handler = this.#handler.call(scope, input);
             const result = await new Files(handler).toArray();
 
-            scope.emit('stop', { task: this.name, date: new Date(), });
+            scope.emit('stop', { 
+                task: this.name,
+                date: new Date(),
+            });
 
             return result;
         } catch (error) {
-            scope.emit('error', { task: this.name, date: new Date(), error: error, });
+            scope.emit('error', {
+                task: this.name,
+                date: new Date(),
+                error,
+            });
 
             return;
         }
